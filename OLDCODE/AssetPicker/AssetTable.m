@@ -29,7 +29,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #import "ALAsset+Info.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <CoreLocation/CoreLocation.h>
-#import "Common.h"
+#import "GlobalUtilities.h"
+
 
 @implementation AssetTable
 
@@ -83,7 +84,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		NSDate *date = [result valueForProperty:ALAssetPropertyDate];
 		CLLocationCoordinate2D coordinate = assetLocation.coordinate;
 		if (CLLocationCoordinate2DIsValid(coordinate)) {
-			DLog(@"asset %@ %@ %@", [result description], [assetLocation description], [date description]);
+			BetterLog(@"asset %@ %@ %@", [result description], [assetLocation description], [date description]);
 		}
 	}];
 }
@@ -187,7 +188,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	
 	//comment these out except when debugging, as they access the file and are slow
 	//CLLocationCoordinate2D coordinate = [asset location];
-	//DLog(@"asset location %@", [NSString stringWithFormat:@"%f, %f", coordinate.latitude, coordinate.longitude]);
+	//BetterLog(@"asset location %@", [NSString stringWithFormat:@"%f, %f", coordinate.latitude, coordinate.longitude]);
     
     return cell;
 }
@@ -266,7 +267,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - (void)viewDidUnload {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
-	DLog(@">>>");
+	BetterLog(@">>>");
 	[self nullify];
 	[super viewDidUnload];
 }

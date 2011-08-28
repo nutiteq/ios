@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //  Created by Alan Paxton on 06/06/2010.
 //
 
-#import "Common.h"
+
 #import "PhotoMapViewController.h"
 #import "MapViewController.h"
 #import "RMMapLayer.h"
@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #import "Query.h"
 #import "CycleStreets.h"
 #import "CycleStreetsAppDelegate.h"
-#import "BusyAlert.h"
 #import "Route.h"
 #import "SegmentVO.h"
 #import <CoreLocation/CoreLocation.h>
@@ -107,6 +106,8 @@ static NSTimeInterval FADE_DURATION = 1.7;
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+	self.mapView.hidden = YES;
+	
 		
 	//Necessary to start route-me service
 	[RMMapView class];
@@ -195,7 +196,7 @@ static NSTimeInterval FADE_DURATION = 1.7;
 }
 
 - (void) afterMapMove: (RMMapView*) map {
-	//DLog(@"afterMapMove");
+	//BetterLog(@"afterMapMove");
 	[blueCircleView setNeedsDisplay];
 	[self requestPhotos];
 }
@@ -206,7 +207,7 @@ static NSTimeInterval FADE_DURATION = 1.7;
  */
 
 - (void) afterMapZoom: (RMMapView*) map byFactor: (float) zoomFactor near:(CGPoint) center {
-	//DLog(@"afterMapZoom");
+	//BetterLog(@"afterMapZoom");
 	[blueCircleView setNeedsDisplay];
 	[self requestPhotos];
 }
@@ -233,7 +234,7 @@ static NSTimeInterval FADE_DURATION = 1.7;
 #pragma mark toolbar actions
 
 - (IBAction) didZoomIn {
-	DLog(@"zoomin");
+	BetterLog(@"zoomin");
 	if ([mapView.contents zoom] < MAX_ZOOM) {
 		[mapView.contents setZoom:[mapView.contents zoom] + 1];
 		[blueCircleView setNeedsDisplay];
@@ -242,7 +243,7 @@ static NSTimeInterval FADE_DURATION = 1.7;
 }
 
 - (IBAction) didZoomOut {
-	DLog(@"zoomout");
+	BetterLog(@"zoomout");
 	if ([mapView.contents zoom] > MIN_ZOOM) {
 		[mapView.contents setZoom:[mapView.contents zoom] - 1];
 		[blueCircleView setNeedsDisplay];
@@ -251,7 +252,7 @@ static NSTimeInterval FADE_DURATION = 1.7;
 }
 
 - (IBAction) didLocation {
-	DLog(@"location");
+	BetterLog(@"location");
 	if (!locationManagerIsLocating) {
 		[self startlocationManagerIsLocating];
 	} else {
@@ -260,7 +261,7 @@ static NSTimeInterval FADE_DURATION = 1.7;
 }
 
 - (IBAction) didShowPhotos {
-	DLog(@"showPhotos");
+	BetterLog(@"showPhotos");
 	if (!showingPhotos) {
 		[self startShowingPhotos];
 	} else {
@@ -269,7 +270,7 @@ static NSTimeInterval FADE_DURATION = 1.7;
 }
 
 - (IBAction) didSearch {
-	DLog(@"search");
+	BetterLog(@"search");
 	if (mapLocationSearchView == nil) {
 		mapLocationSearchView = [[MapLocationSearchViewController alloc] initWithNibName:@"MapLocationSearchView" bundle:nil];
 	}	
@@ -279,7 +280,7 @@ static NSTimeInterval FADE_DURATION = 1.7;
 }
 
 - (void) tapOnMarker: (RMMarker*) marker onMap: (RMMapView*) map {
-	DLog(@"tapMarker");
+	BetterLog(@"tapMarker");
 	if (locationView == nil) {
 		locationView = [[PhotoMapImageLocationViewController alloc] init];
 	}
@@ -487,7 +488,7 @@ static NSTimeInterval FADE_DURATION = 1.7;
 #pragma mark search response
 
 - (void) didMoveToLocation:(CLLocationCoordinate2D)location {
-	DLog(@"didMoveToLocation");
+	BetterLog(@"didMoveToLocation");
 	[mapView moveToLatLong: location];
 }
 
@@ -547,7 +548,7 @@ static NSTimeInterval FADE_DURATION = 1.7;
 - (void)viewDidUnload {
     [self nullify];
 	[super viewDidUnload];
-	DLog(@">>>");
+	BetterLog(@">>>");
 }
 
 

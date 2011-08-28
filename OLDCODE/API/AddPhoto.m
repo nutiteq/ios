@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #import "AddPhoto.h"
 #import "XMLRequest.h"
 #import "CycleStreets.h"
-#import "Common.h"
+
 
 static NSString *format = @"%@?key=%@";
 static NSString *urlPrefix = @"https://www.cyclestreets.net/api/addphoto.xml";

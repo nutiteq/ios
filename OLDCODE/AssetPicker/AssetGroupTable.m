@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #import "AssetGroupTable.h"
 #import "AssetTable.h"
 #import <CoreLocation/CoreLocation.h>
-#import "Common.h"
+
 #import "GlobalUtilities.h"
 
 @implementation AssetGroupTable

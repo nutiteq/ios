@@ -24,10 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //  Created by Alan Paxton on 09/03/2010.
 //
 
-#import "Common.h"
+
 #import "PhotosViewContoller.h"
-#import "UIButton+Blue.h"
-#import "UserValidate.h"
 #import "CycleStreets.h"
 #import "Files.h"
 #import "CategoryLoader.h"
@@ -54,7 +52,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 @synthesize captionBar;
 @synthesize captionDone;
 
-@synthesize sendingAlert;
 @synthesize alert;
 @synthesize deleteAlert;
 @synthesize emailAlert;
@@ -67,9 +64,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 @synthesize preview;
 @synthesize bigImageURL;
 @synthesize photoId;
-
-@synthesize userValidate;
-@synthesize userCreate;
 @synthesize addPhoto;
 @synthesize photoInfo;
 @synthesize photoAction;
@@ -99,8 +93,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	locationManager.delegate = self;
 	locationManagerIsLocating=NO;
 	
-	// set up an alert to use
-	self.sendingAlert = [[BusyAlert alloc] initWithTitle:@"CycleStreets" message:@"Sending photomap.."];
 	
 	//
 	self.captionText.hidden = YES;
@@ -147,7 +139,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 //cancel one of our own busy alerts.
 - (void) didCancelAlert {
-	DLog(@">>>");
+	BetterLog(@">>>");
 }
 
 #pragma mark view
@@ -216,7 +208,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 //What action did the user invoke ?
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-	DLog(@"%d", buttonIndex);
+	BetterLog(@"%d", buttonIndex);
 	if (actionSheet == self.photoAction) {
 		if (buttonIndex == [self.photoAction cancelButtonIndex]) {
 			return;
@@ -334,7 +326,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	sendInProgress = YES;
 	[addPhoto runWithTarget:self onSuccess:@selector(didSucceedAddPhoto:results:) onFailure:@selector(didFailUserOp:withMessage:)];
 
-	[self.sendingAlert show:@"Sending picture to Photomap.."];
+	//TODO: should be HUD
+	//[self.sendingAlert show:@"Sending picture to Photomap.."];
 	
 }
 
@@ -342,7 +335,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	
 	subviewWasActive=YES;
 	
-	DLog(@">>>");
+	BetterLog(@">>>");
 	[self enableButtons:NO];
 	self.captionText.hidden = NO;
 	
@@ -357,7 +350,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 }
 
 - (IBAction) didCaptionDone {
-	DLog(@">>>");
+	BetterLog(@">>>");
 	subviewWasActive=NO;
 	[self.captionText resignFirstResponder];
 	self.currentCaption = self.captionText.text;
@@ -366,7 +359,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 }
 
 - (IBAction) didCaptionCancel {
-	DLog(@">>>");
+	BetterLog(@">>>");
 	subviewWasActive=NO;
 	[self.captionText resignFirstResponder];
 	[self.navigationItem setLeftBarButtonItem:nil animated:YES];
@@ -374,7 +367,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 }
 
 - (IBAction) didInfo {
-	DLog(@">>>");
+	BetterLog(@">>>");
 	subviewWasActive=YES;
 	if (photoInfo == nil) {
 		self.photoInfo = [[[PhotoInfo alloc] initWithNibName:@"PhotoInfo" bundle:nil] autorelease];
@@ -426,7 +419,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 }
 
 - (IBAction) didDelete {
-	DLog(@">>>");
+	BetterLog(@">>>");
 	if (self.deleteAlert == nil) {
 		self.deleteAlert = [[UIAlertView alloc] initWithTitle:@"CycleStreets"
 													  message:@"Really don't use this photo ?"
@@ -448,11 +441,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	if (object == nil) {
 		//clear the asset in use.
 		self.photoAsset = nil;
-		DLog(@"asset cleared");
+		BetterLog(@"asset cleared");
 	} else if ([object isKindOfClass:[ALAsset class]]) {
 		//new asset in use.
 		self.photoAsset = [[[PhotoAsset alloc] initWithAsset:[libraryAssetNotification object]] autorelease];
-		DLog(@"asset selected %@", self.photoAsset);
+		BetterLog(@"asset selected %@", self.photoAsset);
 	}
 	
 	//get the image and state
@@ -476,7 +469,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 void releaseJpegDataProvider(void *info,
 							 const void *data,
 							 size_t size) {
-	DLog(@">>>");
+	BetterLog(@">>>");
 }
 
 //Save the image to the asset library, and then save the asset and its location.
@@ -533,7 +526,7 @@ void releaseJpegDataProvider(void *info,
 
 - (void)imagePickerController:(UIImagePickerController *)usedPicker
 didFinishPickingMediaWithInfo:(NSDictionary *)pickingInfo {
-	DLog(@"media picked.");
+	BetterLog(@"media picked.");
 	selected.image = [pickingInfo valueForKey:UIImagePickerControllerOriginalImage];
 	if (self.picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
 		//save a new photo to the camera roll.
@@ -564,8 +557,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)pickingInfo {
 }
 
 - (void) didSucceedAddPhoto:(XMLRequest *)xmlRequest results:(NSDictionary *)elements {
-	DLog(@">>>");
-	[sendingAlert hide];
+	BetterLog(@">>>");
+	//TODO:
+	//[sendingAlert hide];
 	self.photoAsset = nil;
 	BOOL ok = YES;
 	NSString *url;
@@ -608,8 +602,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)pickingInfo {
 }
 
 - (void) didFailUserOp:(XMLRequest *)request withMessage:(NSString *)message {
-	DLog(@">>>");
-	[sendingAlert hide];
+	BetterLog(@">>>");
+	//TODO
+	//[sendingAlert hide];
 	sendInProgress = NO;
 	if (self.errorAlert == nil) {
 		self.errorAlert = [[[UIAlertView alloc] initWithTitle:@"CycleStreets"
@@ -625,7 +620,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)pickingInfo {
 #pragma mark alert view delegate
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	DLog(@">>>");
+	BetterLog(@">>>");
 	if (alertView == self.alert) {
 		if (sendInProgress) {
 			self.photoAsset = nil;
@@ -672,7 +667,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)pickingInfo {
 
 
 - (void)didCancel {
-	DLog(@">>>");
+	BetterLog(@">>>");
 	[self dismissModalViewControllerAnimated:YES];
 }
 
@@ -681,7 +676,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)pickingInfo {
 - (void)locationManager:(CLLocationManager *)manager
 	didUpdateToLocation:(CLLocation *)newLocation
 		   fromLocation:(CLLocation *)oldLocation{
-	DLog(@">>>");
+	BetterLog(@">>>");
 	
 	
 	NSInteger horizontalAccuracy = [newLocation horizontalAccuracy];
@@ -721,7 +716,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)pickingInfo {
 - (void)locationManager:(CLLocationManager *)manager
 	   didFailWithError:(NSError *)error
 {
-	DLog(@">>>");
+	BetterLog(@">>>");
 }
 
 #pragma mark view unload / release
@@ -753,14 +748,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)pickingInfo {
 	[locationManager release];
 	self.location = nil;
 	
-	self.sendingAlert = nil;
 	self.alert = nil;
 	self.deleteAlert = nil;
 	self.emailAlert = nil;
 	self.errorAlert = nil;
-	
-	self.userValidate = nil;
-	self.userCreate = nil;
 	self.addPhoto = nil;
 	self.photoInfo = nil;
 	self.photoAction = nil;
@@ -777,7 +768,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)pickingInfo {
 - (void)viewDidUnload {
 	[self nullify];
     [super viewDidUnload];
-	DLog(@">>>");
+	BetterLog(@">>>");
 }
 
 

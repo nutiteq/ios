@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import "AssetImage.h"
 #import <AssetsLibrary/AssetsLibrary.h>
-#import "Common.h"
+#import "GlobalUtilities.h"
 
 @implementation AssetImage
 
@@ -101,7 +101,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 }
 
 - (void)viewDidUnload {
-	DLog(@">>>");
+	BetterLog(@">>>");
 	[self nullify];
     [super viewDidUnload];
     // Release any retained subviews of the main view.

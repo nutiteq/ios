@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #import "Location2.h"
 #import "NetworkRequest.h"
 #import "PhotoEntry.h"
-#import "Common.h"
+#import "GlobalUtilities.h"
 
 @implementation Location2
 
@@ -200,7 +200,7 @@ static int SPINNER_HEIGHT = 60;
 }
 
 - (void)viewDidUnload {
-	DLog(@">>>");
+	BetterLog(@">>>");
     [self.bgImageView removeFromSuperview];
 	[self.imageView removeFromSuperview];
 	[self.captionView removeFromSuperview];

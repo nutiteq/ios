@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import "CategoryLoader.h"
 #import "Categories.h"
-#import "Common.h"
+#import "GlobalUtilities.h"
 #import "CycleStreets.h"
 #import "Files.h"
 
@@ -51,7 +51,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 }
 
 - (BOOL) loadCategories:(NSDictionary *)elements {
-	DLog(@"loadCategories");
+	BetterLog(@"loadCategories");
 	NSArray *cats = [self entries:[elements objectForKey:@"category"] named:@"tag"];
 	NSArray *catLabels = [self entries:[elements objectForKey:@"category"] named:@"name"];
 	NSArray *metas = [self entries:[elements objectForKey:@"metacategory"] named:@"tag"];
@@ -71,7 +71,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 }
 
 - (void) didSucceedFetch:(XMLRequest *)xmlRequest results:(NSDictionary *)elements {
-	DLog(@"didSucceedFetch");
+	BetterLog(@"didSucceedFetch");
 	if ([self loadCategories:elements]) {
 		//save 'em.
 		CycleStreets *cycleStreets = [CycleStreets sharedInstance];
@@ -82,7 +82,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 }
 
 - (void) didFailFetch:(XMLRequest *)xmlRequest message:(NSString *)message {
-	DLog(@"didFailFetch");
+	BetterLog(@"didFailFetch");
 }
 
 - (void) fetchCategories {

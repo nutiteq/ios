@@ -27,9 +27,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
-#import "BusyAlert.h"
-#import "UserValidate.h"
-#import "UserCreate.h"
 #import "AddPhoto.h"
 #import "PhotoInfo.h"
 #import "PhotoMapImageLocationViewController.h"
@@ -39,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 @interface PhotosViewContoller : UIViewController
 <UIImagePickerControllerDelegate, UINavigationControllerDelegate,
-CLLocationManagerDelegate, BusyAlertDelegate, UIAlertViewDelegate,
+CLLocationManagerDelegate, UIAlertViewDelegate,
 UITextViewDelegate, UIActionSheetDelegate> {
 	UIImageView *selected;
 	UIBarButtonItem *camera;
@@ -64,7 +61,6 @@ UITextViewDelegate, UIActionSheetDelegate> {
 	CLLocation					*location;
 	BOOL						locationManagerIsLocating;
 	
-	BusyAlert *sendingAlert;
 	UIAlertView *alert;
 	UIAlertView *deleteAlert;
 	UIAlertView *emailAlert;
@@ -116,7 +112,6 @@ UITextViewDelegate, UIActionSheetDelegate> {
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *captionDone;
 @property (nonatomic, retain) IBOutlet UITextView *captionText;
 
-@property (nonatomic, retain) BusyAlert *sendingAlert;
 @property (nonatomic, retain) UIAlertView *alert;
 @property (nonatomic, retain) UIAlertView *deleteAlert;
 @property (nonatomic, retain) UIAlertView *emailAlert;
@@ -127,8 +122,6 @@ UITextViewDelegate, UIActionSheetDelegate> {
 @property (nonatomic, retain) CLLocation *location;
 
 @property (nonatomic, retain) AccountViewController *loginView;
-@property (nonatomic, retain) UserValidate *userValidate;
-@property (nonatomic, retain) UserCreate *userCreate;
 @property (nonatomic, retain) AddPhoto *addPhoto;
 @property (nonatomic, retain) PhotoInfo *photoInfo;
 @property (nonatomic, retain) UIActionSheet *photoAction;
